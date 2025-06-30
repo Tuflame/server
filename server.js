@@ -19,6 +19,7 @@ function printStatus() {
   console.log(
     "============================================================================"
   );
+  console.log(`🌐 ws 啟動在 ws://localhost:${WS_PORT}`);
   console.log(`🚀 Express API 啟動在 http://localhost:${API_PORT}`);
   console.log(`🌐 ngrok 外部位址：${ngrokUrl.replace("http", "ws")}`);
   console.log(`控制端: ${hasControlConnected ? "已連線" : "未連線"}`);
@@ -86,7 +87,10 @@ wss.on("connection", (ws, req) => {
 // 提供 ngrok URL
 app.get("/ngrok-url", (req, res) => {
   if (ngrokUrl) {
-    res.json({ url: ngrokUrl.replace("http", "ws") });
+    res.json({
+      "ngrok-url": ngrokUrl.replace("http", "ws"),
+      "local-url": `ws://localhost:${WS_PORT}`,
+    });
   } else {
     res.status(503).json({ url: "ngrok 尚未啟動" });
   }
